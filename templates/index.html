@@ -1,0 +1,82 @@
+{% from "bootstrap5/form.html" import render_form %} {% block content %}
+{% include "header.html" %}
+<body>
+    <main>
+   <div class="container">
+        <div class="row">
+
+                <div class="col-md-6 col-lg-6 col-xl-6 left-panel">
+                    <h1>Find Your Sound</h1>
+                        <form id="upload-form" action="{{ url_for('search_sound') }}" method="post" class="todo-form mb-3" enctype="multipart/form-data">
+                        <input type="text" name="name" class="form-control todo-input" placeholder="Sound of..." required>
+                        </form>
+                    <!-- Loading indicator -->
+                    <p id="loading">Processing sounds, please wait...</p>
+                </div>
+
+             <div class="col-md-6 col-lg-6 col-xl-6 right-panel">
+                <div class="list-container">
+                    <h2>Your Sounds</h2>
+                    <div class="task-list">
+                       {% if not sound_list %}
+                            <ul>
+                                <li>You didn't get any sounds</li>
+                            </ul>
+                        {% else %}
+                        {% for sound, download_url in sound_list %}
+                            <div class="task-item">
+                                <div class="task-actions">
+                                    <ul>
+                                    <li>
+                                        <a style="margin-right: 10px" href="{{ download_url }}.mp3" class="btn btn-light" download>{{sound}} Download</a>
+                                        <audio id="audio-{{ loop.index }}" class="audio-player">
+                                        <source src="{{ url_for('static', filename='audio/' + sound + '.mp3') }}" type="audio/mpeg">
+                                        Your browser does not support the audio element.
+                                        </audio>
+                                        <button class="btn play-btn" onclick="togglePlay('audio-{{ loop.index }}')">
+                                            <i class="fas fa-play"></i>
+                                        </button>
+                                    </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        {% endfor %}
+                       {% endif %}
+                    </div>
+                </div>
+             </div>
+        </div>
+
+    </div> <!-- End of container -->
+
+
+   </main>
+
+    {% include "footer.html" %}
+
+<script>
+    document.getElementById('upload-form').addEventListener('submit', function() {
+        document.getElementById('loading').style.display = 'block';
+    });
+</script>
+<script>
+    // Function to toggle play/pause for audio player
+    function togglePlay(audioId) {
+        var audio = document.getElementById(audioId);
+        var playButton = document.querySelector(`#${audioId} + .play-btn i`);
+
+        if (audio.paused) {
+            audio.play();
+            playButton.classList.remove('fa-play');
+            playButton.classList.add('fa-pause');  // Change to pause icon when playing
+        } else {
+            audio.pause();
+            playButton.classList.remove('fa-pause');
+            playButton.classList.add('fa-play');   // Change to play icon when paused
+        }
+    }
+</script>
+</body>
+</html>
+
+{% endblock %}
