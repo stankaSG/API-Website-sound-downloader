@@ -1,5 +1,5 @@
 from flask import Flask, render_template, url_for, request, redirect
-from flask_bootstrap import Bootstrap5git
+from flask_bootstrap import Bootstrap5
 import os
 from api_functions import find_sounds, download_sound, get_download_url, clean_audio_folder
 
