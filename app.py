@@ -1,5 +1,6 @@
 from flask import Flask, render_template, url_for, request, redirect
-from flask_bootstrap import Bootstrap5
+from flask_bootstrap import Bootstrap5git
+import os
 from api_functions import find_sounds, download_sound, get_download_url, clean_audio_folder
 
 app = Flask(__name__)
@@ -35,4 +36,6 @@ def search_sound():
 
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    # Get the PORT from environment variable, default to 5000 if not set
+    port = int(os.environ.get('PORT', 5000))
+    app.run(debug=True, host='0.0.0.0', port=port)
